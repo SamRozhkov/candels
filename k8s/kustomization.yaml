@@ -1,26 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 namespace: candles
-
 resources:
   - namespace.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
   - pdb.yaml
-
 labels:
   - pairs:
       app.kubernetes.io/part-of: resource-laboratory
     includeSelectors: false
-
 # Образ и тег. newTag обновляет GitHub Actions (.github/workflows/build.yml) после каждой сборки.
 images:
   - name: cera-landing
     newName: ghcr.io/samrozhkov/cera-landing
-    newTag: latest
-
+    newTag: sha-c4e10b9
 # Runtime-конфиг фронтенда. При изменении kustomize меняет имя ConfigMap,
 # и Deployment автоматически перекатывается.
 configMapGenerator:
