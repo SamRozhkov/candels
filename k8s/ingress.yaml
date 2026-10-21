@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: candles-landing
+  labels:
+    app.kubernetes.io/name: candles-landing
+  annotations:
+    # Выпуск TLS-сертификата через cert-manager; имя ClusterIssuer замените на своё.
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - candles.example.ru
+      secretName: candles-landing-tls
+  rules:
+    - host: candles.example.ru
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: candles-landing
+                port:
+                  name: http

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Свеча Белый чай</title>
+  <desc id="desc">Иллюстрация свечи светлого чайного оттенка</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7fbf5" />
+      <stop offset="100%" stop-color="#dfeedd" />
+    </linearGradient>
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#eaf3e8" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="wax" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#cde7c7" />
+      <stop offset="100%" stop-color="#9dc79a" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)" />
+  <circle cx="180" cy="140" r="100" fill="#def3d8" fill-opacity="0.5" />
+  <ellipse cx="400" cy="495" rx="170" ry="36" fill="#84a57f" fill-opacity="0.22" />
+  <rect x="255" y="160" width="290" height="320" rx="52" fill="url(#glass)" stroke="#b8d0b2" stroke-opacity="0.45" />
+  <rect x="280" y="230" width="240" height="230" rx="30" fill="url(#wax)" />
+  <ellipse cx="400" cy="230" rx="120" ry="24" fill="#d7eed2" />
+  <rect x="394" y="175" width="12" height="70" rx="6" fill="#4a5f3f" />
+  <path d="M400 122 C432 153 428 186 400 205 C372 186 368 153 400 122 Z" fill="#f5ce7f" />
+  <path d="M400 143 C416 161 413 182 400 194 C387 183 384 161 400 143 Z" fill="#fff0bf" />
+  <path d="M160 420 C210 360 265 350 322 385" stroke="#99bb90" stroke-width="7" fill="none" stroke-linecap="round" />
+  <path d="M505 375 C548 355 592 367 626 406" stroke="#8cb284" stroke-width="7" fill="none" stroke-linecap="round" />
+</svg>

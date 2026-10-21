@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: candles
+
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - pdb.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: resource-laboratory
+    includeSelectors: false
+
+# Образ и тег; в CI удобно менять командой:
+#   kustomize edit set image cera-landing=<registry>/cera-landing:<tag>
+images:
+  - name: cera-landing
+    newName: cera-landing
+    newTag: "1.0.0"
+
+# Runtime-конфиг фронтенда. При изменении kustomize меняет имя ConfigMap,
+# и Deployment автоматически перекатывается.
+configMapGenerator:
+  - name: candles-landing-config
+    literals:
+      - FORM_ENDPOINT=https://functions.yandexcloud.net/<id функции>

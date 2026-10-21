@@ -1,0 +1,8 @@
+node_modules
+dist
+functions
+k8s
+.env
+.env.*
+.DS_Store
+*.log
