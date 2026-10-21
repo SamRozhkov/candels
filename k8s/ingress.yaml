@@ -5,8 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/name: candles-landing
   annotations:
-    # Выпуск TLS-сертификата через cert-manager; имя ClusterIssuer замените на своё.
-    cert-manager.io/cluster-issuer: letsencrypt
+    # Выпуск TLS-сертификата через cert-manager.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
