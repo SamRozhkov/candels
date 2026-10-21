@@ -94,17 +94,35 @@ docker run --rm -p 8080:8080 -e FORM_ENDPOINT=https://functions.yandexcloud.net/
 
 Перед деплоем поправьте под свой кластер:
 
-- `k8s/kustomization.yaml` — `images` (реестр и тег образа) и `FORM_ENDPOINT` в `configMapGenerator`;
+- `k8s/kustomization.yaml` — `FORM_ENDPOINT` в `configMapGenerator` (образ и тег обновляет CI);
 - `k8s/ingress.yaml` — домен, `ingressClassName` и имя `ClusterIssuer` cert-manager.
 
+Образ лежит в приватном GitHub Container Registry, поэтому кластеру нужен секрет `ghcr-pull`. Создайте classic-токен GitHub с правом `read:packages` и выполните:
+
 ```bash
-docker build -t <registry>/cera-landing:1.0.0 .
-docker push <registry>/cera-landing:1.0.0
+kubectl create namespace candles
+kubectl -n candles create secret docker-registry ghcr-pull \
+  --docker-server=ghcr.io --docker-username=SamRozhkov --docker-password=<github-токен>
+```
+
+Ручной деплой без Argo CD:
+
+```bash
 kubectl apply -k k8s
 kubectl -n candles rollout status deployment/candles-landing
 ```
 
 При изменении `FORM_ENDPOINT` в `kustomization.yaml` и повторном `kubectl apply -k k8s` поды перезапустятся сами.
+
+## CI/CD (GitHub Actions)
+
+Workflow `.github/workflows/build.yml`:
+
+- на каждый пуш в `main` собирает образ для `linux/amd64` и `linux/arm64`, публикует его в `ghcr.io/samrozhkov/cera-landing` с тегами `sha-<коммит>` и `latest`, затем прописывает новый тег в `k8s/kustomization.yaml` и коммитит это в `main` — Argo CD выкатывает версию сам;
+- на pull request только проверяет, что образ собирается;
+- изменения только в `k8s/`, `argocd/`, `functions/` и `*.md` сборку не запускают.
+
+Запустить вручную: `gh workflow run build.yml`.
 
 ## Argo CD
 
@@ -139,4 +157,5 @@ argocd app get candles-landing
 - `Dockerfile`, `docker/` - образ и конфигурация nginx
 - `k8s/` - манифесты Kubernetes (Kustomize)
 - `argocd/` - Application и AppProject для Argo CD
+- `.github/workflows/build.yml` - сборка образа и обновление тега для Argo CD
 - `AGENTS.md` - правила для AI-агентов в проекте

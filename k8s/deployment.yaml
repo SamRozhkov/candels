@@ -21,6 +21,9 @@ spec:
         app.kubernetes.io/name: candles-landing
     spec:
       automountServiceAccountToken: false
+      # Пакет в GHCR приватный; секрет создаётся вручную (см. README, раздел «Kubernetes»).
+      imagePullSecrets:
+        - name: ghcr-pull
       securityContext:
         runAsNonRoot: true
         runAsUser: 101

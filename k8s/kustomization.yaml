@@ -15,12 +15,11 @@ labels:
       app.kubernetes.io/part-of: resource-laboratory
     includeSelectors: false
 
-# Образ и тег; в CI удобно менять командой:
-#   kustomize edit set image cera-landing=<registry>/cera-landing:<tag>
+# Образ и тег. newTag обновляет GitHub Actions (.github/workflows/build.yml) после каждой сборки.
 images:
   - name: cera-landing
-    newName: cera-landing
-    newTag: "1.0.0"
+    newName: ghcr.io/samrozhkov/cera-landing
+    newTag: latest
 
 # Runtime-конфиг фронтенда. При изменении kustomize меняет имя ConfigMap,
 # и Deployment автоматически перекатывается.
