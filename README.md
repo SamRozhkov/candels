@@ -106,6 +106,29 @@ kubectl -n candles rollout status deployment/candles-landing
 
 При изменении `FORM_ENDPOINT` в `kustomization.yaml` и повторном `kubectl apply -k k8s` поды перезапустятся сами.
 
+## Argo CD
+
+В `argocd/` лежат манифесты для GitOps-деплоя:
+
+- `project.yaml` — AppProject `candles`: разрешает брать манифесты только из этого репозитория и деплоить только в namespace `candles`;
+- `application.yaml` — Application `candles-landing`: следит за папкой `k8s/` в ветке `main`, автоматически синхронизирует изменения, удаляет лишние ресурсы (`prune`) и откатывает ручные правки в кластере (`selfHeal`).
+
+Репозиторий приватный, поэтому сначала дайте Argo CD доступ к нему — fine-grained токеном GitHub с правом **Contents: Read-only** на репозиторий `candels`. Токен не коммитьте:
+
+```bash
+argocd repo add https://github.com/SamRozhkov/candels.git \
+  --username SamRozhkov --password <github-токен>
+```
+
+Затем:
+
+```bash
+kubectl apply -f argocd/project.yaml -f argocd/application.yaml
+argocd app get candles-landing
+```
+
+Дальше деплой идёт через git: меняете тег образа или `FORM_ENDPOINT` в `k8s/kustomization.yaml`, пушите в `main` — Argo CD применит изменения сам. Образ должен лежать в реестре, доступном кластеру (см. раздел «Kubernetes»).
+
 ## Структура
 
 - `index.html` - HTML-шаблон
@@ -115,4 +138,5 @@ kubectl -n candles rollout status deployment/candles-landing
 - `functions/send-email/index.js` - облачная функция отправки писем
 - `Dockerfile`, `docker/` - образ и конфигурация nginx
 - `k8s/` - манифесты Kubernetes (Kustomize)
+- `argocd/` - Application и AppProject для Argo CD
 - `AGENTS.md` - правила для AI-агентов в проекте

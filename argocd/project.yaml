@@ -1,0 +1,28 @@
+# Отдельный проект Argo CD: ограничивает, откуда берутся манифесты и куда их можно деплоить.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: candles
+  namespace: argocd
+spec:
+  description: Лендинг восковых свечей Resource Laboratory
+  sourceRepos:
+    - https://github.com/SamRozhkov/candels.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: candles
+  # Namespace создаётся из k8s/namespace.yaml, это кластерный ресурс.
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ConfigMap
+    - group: ""
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: policy
+      kind: PodDisruptionBudget

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: candles-landing
+  namespace: argocd
+  # Удалять ресурсы приложения из кластера вместе с самим Application.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: candles
+  source:
+    repoURL: https://github.com/SamRozhkov/candels.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: candles
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 10
