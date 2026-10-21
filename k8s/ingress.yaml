@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - candles.example.ru
+        - candles.rozhkov.pro
       secretName: candles-landing-tls
   rules:
-    - host: candles.example.ru
+    - host: candles.rozhkov.pro
       http:
         paths:
           - path: /
